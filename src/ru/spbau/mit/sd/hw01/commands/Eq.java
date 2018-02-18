@@ -2,20 +2,15 @@ package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
 
-public class Eq implements ICommand {
-    private String var;
-    private String value;
-    private Environment env;
-
-    public Eq(String var, String value, Environment env) {
-        this.var = var;
-        this.value = value;
-        this.env = env;
+public class Eq extends AbstractCommand {
+    Eq(String[] args, Environment env) {
+        super(args, env);
     }
-
 
     @Override
     public void exec(String[] input) {
-        env.set(var, value);
+        assert (args.length == 2);
+
+        env.set(args[0], args[1]);
     }
 }

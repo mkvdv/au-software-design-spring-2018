@@ -10,7 +10,7 @@ public class Environment {
         this.env = new HashMap<>();
     }
 
-    public static String getCurrentDir() {
+    public String getCurrentDir() {
         return Paths.get("").toAbsolutePath().toString();
     }
 

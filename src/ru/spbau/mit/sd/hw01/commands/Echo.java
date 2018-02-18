@@ -1,10 +1,11 @@
 package ru.spbau.mit.sd.hw01.commands;
 
-public class Echo implements ICommand {
-    private String[] args;
+import ru.spbau.mit.sd.hw01.Environment;
 
-    public Echo(String[] args) {
-        this.args = args;
+public class Echo extends AbstractCommand {
+
+    Echo(String[] args, Environment env) {
+        super(args, env);
     }
 
     @Override
