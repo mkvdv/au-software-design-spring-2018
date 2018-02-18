@@ -18,6 +18,7 @@ abstract class AbstractCommand {
      * Do some work - depends on command implementation
      *
      * @param stdin is input stream of command (often Piped Stream)
+     * @return input stream for next command (result)
      */
     abstract PipedInputStream exec(InputStream stdin);
 }
