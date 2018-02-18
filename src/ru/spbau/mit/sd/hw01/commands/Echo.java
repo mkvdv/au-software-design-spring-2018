@@ -2,6 +2,11 @@ package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+
 public class Echo extends AbstractCommand {
 
     Echo(String[] args, Environment env) {
@@ -9,11 +14,26 @@ public class Echo extends AbstractCommand {
     }
 
     @Override
-    public void exec(String[] input) {
-        for (String s : args) {
-            System.out.print(s);
-            System.out.print(" ");
+    public PipedInputStream exec(InputStream stdin) {
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream();
+
+        try {
+            pis.connect(pos);
+
+            for (String s : args) {
+                pos.write(s.getBytes());
+                pos.write(" ".getBytes());
+            }
+            pos.write('\n');
+
+            pos.flush();
+            pos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
-        System.out.println();
+
+        return pis;
     }
 }

@@ -2,6 +2,9 @@ package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
 
+import java.io.InputStream;
+import java.io.PipedInputStream;
+
 abstract class AbstractCommand {
     String[] args;
     Environment env;
@@ -11,6 +14,10 @@ abstract class AbstractCommand {
         this.env = env;
     }
 
-
-    abstract void exec(String[] input);
+    /**
+     * Do some work - depends on command implementation
+     *
+     * @param stdin is input stream of command (often Piped Stream)
+     */
+    abstract PipedInputStream exec(InputStream stdin);
 }
