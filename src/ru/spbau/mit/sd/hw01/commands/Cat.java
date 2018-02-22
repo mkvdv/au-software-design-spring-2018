@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Cat extends AbstractCommand {
-    Cat(String[] args, Environment env) {
+    public Cat(String[] args, Environment env) {
         super(args, env);
     }
 

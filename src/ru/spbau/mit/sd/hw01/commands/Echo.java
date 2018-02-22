@@ -9,7 +9,7 @@ import java.io.PipedOutputStream;
 
 public class Echo extends AbstractCommand {
 
-    Echo(String[] args, Environment env) {
+    public Echo(String[] args, Environment env) {
         super(args, env);
     }
 

@@ -6,7 +6,7 @@ import java.io.*;
 import java.nio.file.StandardCopyOption;
 
 public class Exec extends AbstractCommand {
-    Exec(String[] args, Environment env) {
+    public Exec(String[] args, Environment env) {
         super(args, env);
     }
 
@@ -18,7 +18,7 @@ public class Exec extends AbstractCommand {
      * @return input stream for next command (result)
      */
     @Override
-    PipedInputStream exec(InputStream stdin) {
+    public PipedInputStream exec(InputStream stdin) {
         PipedInputStream pis = new PipedInputStream();
         PipedOutputStream pos = new PipedOutputStream();
 

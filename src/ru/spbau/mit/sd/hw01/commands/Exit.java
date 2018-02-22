@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 
 public class Exit extends AbstractCommand {
-    Exit(String[] args, Environment env) {
+    public Exit(String[] args, Environment env) {
         super(args, env);
     }
 

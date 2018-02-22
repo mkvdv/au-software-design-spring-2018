@@ -5,11 +5,11 @@ import ru.spbau.mit.sd.hw01.Environment;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 
-abstract class AbstractCommand {
-    String[] args;
-    Environment env;
+public abstract class AbstractCommand {
+    protected String[] args;
+    protected Environment env;
 
-    AbstractCommand(String[] args, Environment env) {
+    public AbstractCommand(String[] args, Environment env) {
         this.args = args;
         this.env = env;
     }
@@ -20,5 +20,5 @@ abstract class AbstractCommand {
      * @param stdin is input stream of command (often Piped Stream)
      * @return input stream for next command (result)
      */
-    abstract PipedInputStream exec(InputStream stdin);
+    public abstract PipedInputStream exec(InputStream stdin);
 }

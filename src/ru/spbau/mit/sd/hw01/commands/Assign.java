@@ -5,8 +5,8 @@ import ru.spbau.mit.sd.hw01.Environment;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 
-public class Eq extends AbstractCommand {
-    Eq(String[] args, Environment env) {
+public class Assign extends AbstractCommand {
+    public Assign(String[] args, Environment env) {
         super(args, env);
     }
 

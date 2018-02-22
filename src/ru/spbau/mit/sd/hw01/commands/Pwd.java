@@ -8,7 +8,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 public class Pwd extends AbstractCommand {
-    Pwd(String[] args, Environment env) {
+    public Pwd(String[] args, Environment env) {
         super(args, env);
     }
 

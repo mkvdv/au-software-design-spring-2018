@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Wc extends AbstractCommand {
-    Wc(String[] args, Environment env) {
+    public Wc(String[] args, Environment env) {
         super(args, env);
     }
 
