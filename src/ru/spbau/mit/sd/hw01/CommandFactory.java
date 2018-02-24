@@ -42,7 +42,7 @@ public class CommandFactory {
                     return new Wc(args, env);
 
                 default:
-                    return new Exec(args, env);
+                    return new Exec(cmd, env);
             }
         }
     }

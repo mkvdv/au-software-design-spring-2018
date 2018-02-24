@@ -20,6 +20,7 @@ public class Pwd extends AbstractCommand {
         try {
             pis.connect(pos);
             pos.write(env.getCurrentDir().getBytes());
+            pos.write('\n');
             pos.flush();
             pos.close();
         } catch (IOException e) {

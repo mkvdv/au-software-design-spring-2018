@@ -25,21 +25,18 @@ public class Exec extends AbstractCommand {
         try {
             pis.connect(pos);
 
-            StringBuilder cmd = new StringBuilder();
-            for (String s : args) {
-                cmd.append(s);
-                cmd.append(" ");
+            ProcessBuilder pb = new ProcessBuilder(args);
+            File stdinFile = null;
+
+            if (stdin != null) {
+                stdinFile = File.createTempFile("au_sd2018", "simple_cli.tmp",
+                        new File("/tmp"));
+                java.nio.file.Files.copy(
+                        stdin,
+                        stdinFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING);
+                pb.redirectInput(stdinFile);
             }
-
-            ProcessBuilder pb = new ProcessBuilder(cmd.toString());
-            File stdinFile = File.createTempFile("au_sd2018", "simple_cli.tmp",
-                    new File("/tmp"));
-
-            java.nio.file.Files.copy(
-                    stdin,
-                    stdinFile.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING);
-            pb.redirectInput(stdinFile);
 
             Process ps = pb.start();
             ps.waitFor();
@@ -50,7 +47,9 @@ public class Exec extends AbstractCommand {
             int readedSize = psOutput.read(buffer);
             pos.write(buffer, 0, readedSize);
 
-            stdinFile.delete();
+            if (stdinFile != null) {
+                stdinFile.delete();
+            }
             pos.flush();
             pos.close();
         } catch (IOException | InterruptedException e) {
