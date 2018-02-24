@@ -26,9 +26,9 @@ public class Lexer {
 
                 case '\"':
                 case '\'': {
-                    int end_ix = extract_str(s, ix);
-                    // not include quotation!
-                    arr.add(s.substring(ix + 1, end_ix));
+                    final int begin = ix;
+                    final int end_ix = extract_str(s, ix);
+                    arr.add(s.substring(begin, end_ix + 1));
                     ix = end_ix + 1;
                 }
                 break;

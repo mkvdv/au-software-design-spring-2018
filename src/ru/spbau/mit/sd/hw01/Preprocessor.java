@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 
 public class Preprocessor {
-
     /**
      * @param cmd raw command between pipes, not preprocessed
      * @return array
@@ -18,6 +17,16 @@ public class Preprocessor {
         ArrayList<String> tokenized = Lexer.tokenize(cmd);
 
         for (int i = 0; i < tokenized.size(); i++) {
+            if (tokenized.get(i).charAt(0) == '\'') {
+                // don't substitute
+                tokenized.set(i, removeQuotations(tokenized.get(i)));
+                continue;
+            }
+
+            if (tokenized.get(i).charAt(0) == '\"') {
+                tokenized.set(i, removeQuotations(tokenized.get(i)));
+            }
+
             String[] words = tokenized.get(i).split("\\s");
             Boolean replaced = false;
             for (int j = 0; j < words.length; j++) {
@@ -25,8 +34,10 @@ public class Preprocessor {
                     String replacement = env.get(words[j].substring(1));
                     if (replacement != null) {
                         words[j] = replacement;
-                        replaced = true;
+                    } else {
+                        words[j] = "";
                     }
+                    replaced = true;
                 }
             }
             if (replaced) {
@@ -45,5 +56,9 @@ public class Preprocessor {
         return tokenized;
     }
 
+    private static String removeQuotations(String s) {
+        assert s.length() >= 2;
+        return s.substring(1, s.length() - 1);
+    }
 
 }
