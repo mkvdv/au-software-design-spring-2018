@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class Environment {
     private HashMap<String, String> env;
+    private boolean readOnly = false; // bash don't modify env, if there any pipes
 
     public Environment() {
         this.env = new HashMap<>();
@@ -15,10 +16,19 @@ public class Environment {
     }
 
     public void set(String key, String val) {
-        env.put(key, val);
+        if (!readOnly)
+            env.put(key, val);
     }
 
     public String get(String key) {
         return env.get(key);
+    }
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 }
