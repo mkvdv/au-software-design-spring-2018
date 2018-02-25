@@ -7,13 +7,20 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.util.Arrays;
 
+/**
+ * Class for execution commands like FILE=test.txt
+ */
 public class Assign extends AbstractCommand {
-
-
     public Assign(String[] args, Environment env) {
         super(args, env);
     }
 
+    /**
+     * Save new key-value pair in env.
+     *
+     * @param stdin ignored
+     * @return null
+     */
     @Override
     public PipedInputStream exec(InputStream stdin) {
         Log.info("assign with " + Arrays.toString(args));
@@ -22,6 +29,4 @@ public class Assign extends AbstractCommand {
         env.set(args[0], args[1]);
         return null;
     }
-
-
 }

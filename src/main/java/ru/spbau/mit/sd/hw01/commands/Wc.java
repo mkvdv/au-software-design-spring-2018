@@ -10,15 +10,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+/**
+ * Class for execution commands like: wc file1
+ * Or wc from stdin
+ */
 public class Wc extends AbstractCommand {
     public Wc(String[] args, Environment env) {
         super(args, env);
     }
 
     /**
-     * Like in gnu coreutils - ignore stdin, if has args
+     * Do stuff like wc, if there any args - do it from file.
      *
      * @param stdin is like stdin for wc application in unix
+     * @return stream with result
+     * @throws CommandExecuteException
      */
     @Override
     public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
@@ -28,8 +34,8 @@ public class Wc extends AbstractCommand {
         PipedInputStream pis = new PipedInputStream();
 
         int nl = 0;
-        int n_bytes = 0;
-        int n_words = 0;
+        int nBytes = 0;
+        int nWords = 0;
 
         if (args.length > 0) {
             // read from file
@@ -39,9 +45,9 @@ public class Wc extends AbstractCommand {
             byte[] bytes;
             try {
                 bytes = Files.readAllBytes(path);
-                n_bytes = bytes.length;
+                nBytes = bytes.length;
                 String s = new String(bytes);
-                n_words = countWords(s);
+                nWords = countWords(s);
                 nl = countNL(s);
 
             } catch (IOException e) {
@@ -64,16 +70,16 @@ public class Wc extends AbstractCommand {
             }
             buf = bos.toByteArray();
 
-            n_bytes = buf.length;
+            nBytes = buf.length;
             String s = new String(buf);
-            n_words = countWords(s);
+            nWords = countWords(s);
             nl = countNL(s);
         }
 
 
         try {
             pis.connect(pos);
-            pos.write((nl + "\t" + n_words + '\t' + n_bytes + '\n').getBytes());
+            pos.write((nl + "\t" + nWords + '\t' + nBytes + '\n').getBytes());
             pos.flush();
             pos.close();
         } catch (IOException e) {

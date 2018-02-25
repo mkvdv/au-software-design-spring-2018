@@ -6,6 +6,9 @@ import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import java.io.*;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * Class for execution command, that shell doesn't support.
+ */
 public class Exec extends AbstractCommand {
     public Exec(String[] args, Environment env) {
         super(args, env);
@@ -14,6 +17,7 @@ public class Exec extends AbstractCommand {
     /**
      * Run command with arguments - bot from args[]
      * redirect stdin stream to it
+     * Use temporary file (kostil') for redirecting input.
      *
      * @param stdin is input stream of command (often Piped Stream)
      * @return input stream for next command (result)
@@ -28,6 +32,7 @@ public class Exec extends AbstractCommand {
             pis.connect(pos);
             ProcessBuilder pb = new ProcessBuilder(args);
 
+            // use tmp file for redirecting input - bad design
             if (stdin != null) {
                 stdinFile = File.createTempFile("au_sd2018", "simple_cli.tmp",
                         new File("/tmp"));

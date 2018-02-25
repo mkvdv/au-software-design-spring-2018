@@ -4,16 +4,18 @@ import ru.spbau.mit.sd.hw01.exceptions.LexicalException;
 
 import java.util.ArrayList;
 
+/**
+ * Store some static functions for tokenizing strings.
+ */
 public class Lexer {
     /**
-     * Extract all "text" and 'text' from strings,
-     * split using '=' symbol, so it looks like list of
-     * shell arguments
+     * Extract all tokens, return array of command arguments.
      *
-     * @param s string command without pipe symbols
-     * @return
+     * @param s - raw command string
+     * @return array of tokens (command args and names)
+     * @throws LexicalException if quotation not ending or other inner exception
      */
-    public static ArrayList<String> tokenize(String s) throws LexicalException {
+    public static ArrayList<String> tokenize(final String s) throws LexicalException {
         ArrayList<String> arr = new ArrayList<>();
 
         int ix = 0;
@@ -26,10 +28,10 @@ public class Lexer {
 
                 case '\"':
                 case '\'': {
-                    final int begin = ix;
-                    final int end_ix = extract_str(s, ix);
-                    arr.add(s.substring(begin, end_ix + 1));
-                    ix = end_ix + 1;
+                    final int beginIndex = ix;
+                    final int endIndex = extractStr(s, ix);
+                    arr.add(s.substring(beginIndex, endIndex + 1));
+                    ix = endIndex + 1;
                 }
                 break;
 
@@ -44,17 +46,17 @@ public class Lexer {
                     break;
 
                 case '$': {
-                    int end_ix = extract_name(s, ix);
-                    arr.add(s.substring(ix, end_ix));
-                    ix = end_ix;
+                    int endIndex = extractName(s, ix);
+                    arr.add(s.substring(ix, endIndex));
+                    ix = endIndex;
                 }
                 break;
 
 
                 default: {
-                    int end_ix = extract_token(s, ix);
-                    arr.add(s.substring(ix, end_ix));
-                    ix = end_ix;
+                    int endIndex = extractToken(s, ix);
+                    arr.add(s.substring(ix, endIndex));
+                    ix = endIndex;
                 }
                 break;
             }
@@ -68,7 +70,7 @@ public class Lexer {
      * @param ix
      * @return ix after ending of $name
      */
-    private static int extract_name(String s, int ix) {
+    private static int extractName(final String s, int ix) {
         ix++;
         while (ix < s.length() && !Character.isWhitespace(s.charAt(ix)) && s.charAt(ix) != '=') {
             ix++;
@@ -79,13 +81,13 @@ public class Lexer {
     }
 
     /**
-     * Retrun ix after any other token, not beginning with $ or ("|')
+     * Return ix after any other token, not beginning with $ or ("|').
      *
      * @param s
      * @param ix
      * @return first index after ending
      */
-    private static int extract_token(String s, int ix) {
+    private static int extractToken(final String s, int ix) {
         ix++;
 
         while (ix < s.length() && !Character.isWhitespace(s.charAt(ix)) && s.charAt(ix) != '=') {
@@ -96,11 +98,14 @@ public class Lexer {
     }
 
     /**
+     * Return index after string argument ends.
+     *
      * @param s
      * @param ix
      * @return return ix after ending ' or " symbol
+     * @throws LexicalException if not ending quotation
      */
-    private static int extract_str(String s, int ix) throws LexicalException {
+    private static int extractStr(final String s, int ix) throws LexicalException {
         char quotation = s.charAt(ix);
         ix++;
         while (ix < s.length() && s.charAt(ix) != quotation) {

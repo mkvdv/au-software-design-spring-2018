@@ -1,6 +1,5 @@
 package ru.spbau.mit.sd.hw01;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 import ru.spbau.mit.sd.hw01.commands.Echo;
@@ -12,6 +11,9 @@ import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+/**
+ * Basic test cases
+ */
 public class Tests {
     @Test
     public void testPwd() {
@@ -86,7 +88,7 @@ public class Tests {
 
         Shell sh = new Shell();
         try {
-            sh.execute_command(cmd, env);
+            sh.executeCommand(cmd, env);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,7 +104,7 @@ public class Tests {
         Shell sh = new Shell();
         InputStream out = null;
         try {
-            out = sh.execute_command(cmd, env);
+            out = sh.executeCommand(cmd, env);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,7 +126,7 @@ public class Tests {
         Shell sh = new Shell();
         InputStream out = null;
         try {
-            out = sh.execute_command(cmd, env);
+            out = sh.executeCommand(cmd, env);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -143,7 +145,7 @@ public class Tests {
         Shell sh = new Shell();
         InputStream out = null;
         try {
-            out = sh.execute_command(cmd, env);
+            out = sh.executeCommand(cmd, env);
         } catch (Exception e) {
             e.printStackTrace();
         }

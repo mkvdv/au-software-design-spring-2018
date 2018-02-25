@@ -12,13 +12,19 @@ import java.io.PipedInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+/**
+ * Class for reading and execution commands.
+ */
 public class Shell {
+    /**
+     * Run shell session, never return.
+     */
     public void run() {
         Log.info("Shell Started");
         Scanner sc = new Scanner(System.in);
         Environment env = new Environment();
 
+        // return using exit shell command
         while (true) {
             System.out.print("> ");
             if (sc.hasNext()) {
@@ -26,7 +32,7 @@ public class Shell {
 
                 InputStream res = null;
                 try {
-                    res = execute_command(line, env);
+                    res = executeCommand(line, env);
                 } catch (LexicalException | IncorrectCommandException | CommandExecuteException e) {
                     System.out.println(e.getMessage());
                 }
@@ -46,20 +52,30 @@ public class Shell {
         }
     }
 
-    public InputStream execute_command(String raw_cmd, Environment env)
+    /**
+     * Execute raw command, return stream, which contain output of command.
+     *
+     * @param rawCmd input string from console
+     * @param env    environment, store variables
+     * @return InputStream with output of command in it
+     * @throws LexicalException          if there lexical error
+     * @throws IncorrectCommandException if command format is wrong
+     * @throws CommandExecuteException   if some error during execution of command
+     */
+    public InputStream executeCommand(String rawCmd, Environment env)
             throws LexicalException, IncorrectCommandException, CommandExecuteException {
         PipedInputStream stdin = null;
-        ArrayList<String> preprocessed_cmd = Preprocessor.preprocess(raw_cmd, env);
+        ArrayList<String> preprocessedCmd = Preprocessor.preprocess(rawCmd, env);
 
-        boolean env_RO = false;
-        if (preprocessed_cmd.contains("|")) {
+        boolean envRO = false;
+        if (preprocessedCmd.contains("|")) {
             env.setReadOnly(true);
-            env_RO = true;
+            envRO = true;
         }
 
-        ArrayList<Integer> pipeIndexes = new ArrayList<Integer>(); // indices of pipe symbols in arraylist
-        for (int i = 0; i < preprocessed_cmd.size(); i++) {
-            if ("|".equals(preprocessed_cmd.get(i))) {
+        ArrayList<Integer> pipeIndexes = new ArrayList<>(); // indices of pipe symbols in array list
+        for (int i = 0; i < preprocessedCmd.size(); i++) {
+            if ("|".equals(preprocessedCmd.get(i))) {
                 pipeIndexes.add(i);
             }
         }
@@ -68,26 +84,25 @@ public class Shell {
             int beg = 0;
             int end = pipeIndexes.get(0);
             final int commandsNumber = pipeIndexes.size() + 1;
-            for (int cmd_no = 1; cmd_no <= commandsNumber; cmd_no++) {
-                AbstractCommand cmd_obj =
-                        CommandFactory.generate(preprocessed_cmd.subList(beg, end).toArray(new String[0]), env);
-                stdin = cmd_obj.exec(stdin); // it updates
+            for (int cmdNo = 1; cmdNo <= commandsNumber; cmdNo++) {
+                AbstractCommand cmdObj =
+                        CommandFactory.generate(preprocessedCmd.subList(beg, end).toArray(new String[0]), env);
+                stdin = cmdObj.exec(stdin); // it updates
 
                 beg = end + 1;
-                if (cmd_no < pipeIndexes.size()) {
-                    end = pipeIndexes.get(cmd_no);
+                if (cmdNo < pipeIndexes.size()) {
+                    end = pipeIndexes.get(cmdNo);
                 } else {
-                    end = preprocessed_cmd.size();
+                    end = preprocessedCmd.size();
                 }
             }
-
         } else {
-            AbstractCommand cmd_obj = CommandFactory.generate(preprocessed_cmd.toArray(new String[0]), env);
-            stdin = cmd_obj.exec(null);
+            AbstractCommand cmdObj = CommandFactory.generate(preprocessedCmd.toArray(new String[0]), env);
+            stdin = cmdObj.exec(null);
         }
 
         // restore env status
-        if (env_RO) {
+        if (envRO) {
             env.setReadOnly(false);
         }
 

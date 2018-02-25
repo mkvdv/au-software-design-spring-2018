@@ -5,8 +5,18 @@ import ru.spbau.mit.sd.hw01.exceptions.IncorrectCommandException;
 
 import java.util.Arrays;
 
-
+/**
+ * Provide static function for generating command object from array of strings.
+ */
 public class CommandFactory {
+    /**
+     * Generating command object from array of strings.
+     *
+     * @param cmd array of command names and arguments
+     * @param env current shell environment
+     * @return command object
+     * @throws IncorrectCommandException if command format is wrong
+     */
     public static AbstractCommand generate(String[] cmd, Environment env) throws IncorrectCommandException {
         if (cmd.length == 3 && cmd[1].equals("=")) {
             String[] args = {cmd[0], cmd[2]};
@@ -16,8 +26,9 @@ public class CommandFactory {
             String[] args = Arrays.copyOfRange(cmd, 1, cmd.length);
             switch (cmd[0]) {
                 case "cat":
-                    if (args.length != 1) // exactly one!
+                    if (args.length != 1) { // exactly one!
                         throw new IncorrectCommandException(cmd[0]);
+                    }
                     return new Cat(args, env);
 
                 case "echo":

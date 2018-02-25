@@ -13,12 +13,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+/**
+ * Class for execution commands like: cat file1
+ */
 public class Cat extends AbstractCommand {
     public Cat(String[] args, Environment env) {
         super(args, env);
     }
 
-    // в случае ошибки цепочка pipe-ов прерывается
+    /**
+     * Print file to returned stream.
+     *
+     * @param stdin is input stream of command (often Piped Stream)
+     * @return stream, contain text of file.
+     * @throws CommandExecuteException
+     */
     @Override
     public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
         assert (args.length == 1); // here just 1 file

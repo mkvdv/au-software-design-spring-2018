@@ -5,14 +5,22 @@ import ru.spbau.mit.sd.hw01.exceptions.LexicalException;
 import java.util.ArrayList;
 
 
+/**
+ * Contain functions for preprocessing strings.
+ */
 public class Preprocessor {
     /**
-     * @param cmd raw command between pipes, not preprocessed
-     * @return array
+     * Preprocess raw command, make substitution, split to tokens.
+     *
+     * @param cmd raw command
+     * @param env - enviroment with variables
+     * @return array of arguments
+     * @throws LexicalException if command is incorrect
      */
-    public static ArrayList<String> preprocess(String cmd, Environment env) throws LexicalException {
-        if (cmd == null)
+    public static ArrayList<String> preprocess(final String cmd, final Environment env) throws LexicalException {
+        if (cmd == null) {
             return null;
+        }
 
         ArrayList<String> tokenized = Lexer.tokenize(cmd);
 
@@ -62,39 +70,9 @@ public class Preprocessor {
         return tokenized;
     }
 
-    private static String removeQuotations(String s) {
+    private static String removeQuotations(final String s) {
         assert s.length() >= 2;
         return s.substring(1, s.length() - 1);
-    }
-
-    /**
-     * Substitute all occurrences like $key int string, using dict from Environment
-     *
-     * @param s
-     * @param env
-     * @return
-     */
-    private static String substitute(String s, Environment env) {
-        StringBuilder substituted = new StringBuilder(s.length());
-
-        int beg = 0;
-        int ix = s.indexOf('$');
-
-        while (ix >= 0) {
-            substituted.append(s.substring(beg, ix));
-            beg = ix + 1;
-            ix = s.indexOf("\\s");
-            String key = s.substring(beg, ix);
-            String replacement = env.get(key);
-            if (replacement != null) {
-                substituted.append(replacement);
-            }
-
-            beg = ix;
-            ix = s.indexOf('$', ix);
-        }
-
-        return substituted.toString();
     }
 
 }
