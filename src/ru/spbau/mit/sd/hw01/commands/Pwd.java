@@ -1,6 +1,7 @@
 package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +14,7 @@ public class Pwd extends AbstractCommand {
     }
 
     @Override
-    public PipedInputStream exec(InputStream stdin) {
+    public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream();
 
@@ -25,7 +26,7 @@ public class Pwd extends AbstractCommand {
             pos.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new CommandExecuteException(e.getMessage());
         }
 
         return pis;

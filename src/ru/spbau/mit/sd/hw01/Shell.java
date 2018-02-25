@@ -1,6 +1,7 @@
 package ru.spbau.mit.sd.hw01;
 
 import ru.spbau.mit.sd.hw01.commands.AbstractCommand;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import ru.spbau.mit.sd.hw01.exceptions.IncorrectCommandException;
 import ru.spbau.mit.sd.hw01.exceptions.LexicalException;
 import ru.spbau.mit.sd.hw01.utils.Log;
@@ -26,10 +27,8 @@ public class Shell {
                 InputStream res = null;
                 try {
                     res = execute_command(line, env);
-                } catch (LexicalException e) {
+                } catch (LexicalException | IncorrectCommandException | CommandExecuteException e) {
                     System.out.println(e.getMessage());
-                } catch (IncorrectCommandException e) {
-                    e.printStackTrace(); // todo fix
                 }
 
                 // todo move to utils
@@ -48,7 +47,7 @@ public class Shell {
     }
 
     private InputStream execute_command(String raw_cmd, Environment env)
-            throws LexicalException, IncorrectCommandException {
+            throws LexicalException, IncorrectCommandException, CommandExecuteException {
         PipedInputStream stdin = null;
         ArrayList<String> preprocessed_cmd = Preprocessor.preprocess(raw_cmd, env);
 
@@ -65,7 +64,6 @@ public class Shell {
             }
         }
 
-
         if (!pipeIndexes.isEmpty()) {
             int beg = 0;
             int end = pipeIndexes.get(0);
@@ -74,7 +72,6 @@ public class Shell {
                 AbstractCommand cmd_obj =
                         CommandFactory.generate(preprocessed_cmd.subList(beg, end).toArray(new String[0]), env);
                 stdin = cmd_obj.exec(stdin); // it updates
-
 
                 beg = end + 1;
                 if (cmd_no < pipeIndexes.size()) {

@@ -1,6 +1,7 @@
 package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import ru.spbau.mit.sd.hw01.utils.Log;
 
 import java.io.*;
@@ -20,7 +21,7 @@ public class Wc extends AbstractCommand {
      * @param stdin is like stdin for wc application in unix
      */
     @Override
-    public PipedInputStream exec(InputStream stdin) {
+    public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
         Log.info("wc with " + Arrays.toString(args));
 
         PipedOutputStream pos = new PipedOutputStream();
@@ -44,8 +45,8 @@ public class Wc extends AbstractCommand {
                 nl = countNL(s);
 
             } catch (IOException e) {
-                System.err.println("ERROR: Incorrect file path");
-                return null;
+                e.printStackTrace();
+                throw new CommandExecuteException(e.getMessage());
             }
         } else {
             // read from stdin arg
@@ -77,7 +78,7 @@ public class Wc extends AbstractCommand {
             pos.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new CommandExecuteException(e.getMessage());
         }
 
         return pis;

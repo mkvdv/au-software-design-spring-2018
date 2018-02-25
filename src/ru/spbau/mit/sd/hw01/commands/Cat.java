@@ -1,6 +1,7 @@
 package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import ru.spbau.mit.sd.hw01.utils.Log;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class Cat extends AbstractCommand {
 
     // в случае ошибки цепочка pipe-ов прерывается
     @Override
-    public PipedInputStream exec(InputStream stdin) {
+    public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
         assert (args.length == 1); // here just 1 file
         Log.info("cat with " + Arrays.toString(args));
         PipedOutputStream pos = new PipedOutputStream();
@@ -35,8 +36,7 @@ public class Cat extends AbstractCommand {
             pos.flush();
             pos.close();
         } catch (IOException e) {
-            System.out.println("ERROR: Incorrect file path");
-            return null;
+            throw new CommandExecuteException("cat " + args[0]);
         }
         return pis;
     }

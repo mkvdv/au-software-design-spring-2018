@@ -1,6 +1,7 @@
 package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 
 import java.io.*;
 import java.nio.file.StandardCopyOption;
@@ -18,15 +19,14 @@ public class Exec extends AbstractCommand {
      * @return input stream for next command (result)
      */
     @Override
-    public PipedInputStream exec(InputStream stdin) {
+    public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
         PipedInputStream pis = new PipedInputStream();
         PipedOutputStream pos = new PipedOutputStream();
+        File stdinFile = null;
 
         try {
             pis.connect(pos);
-
             ProcessBuilder pb = new ProcessBuilder(args);
-            File stdinFile = null;
 
             if (stdin != null) {
                 stdinFile = File.createTempFile("au_sd2018", "simple_cli.tmp",
@@ -54,9 +54,8 @@ public class Exec extends AbstractCommand {
             pos.close();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            return null;
+            throw new CommandExecuteException(e.getMessage());
         }
-
 
         return pis;
     }

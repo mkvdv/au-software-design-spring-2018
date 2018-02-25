@@ -17,7 +17,7 @@ public class CommandFactory {
             switch (cmd[0]) {
                 case "cat":
                     if (args.length != 1) // exactly one!
-                        throw new IncorrectCommandException();
+                        throw new IncorrectCommandException(cmd[0]);
                     return new Cat(args, env);
 
                 case "echo":
@@ -25,19 +25,19 @@ public class CommandFactory {
 
                 case "exit":
                     if (args.length != 0) {
-                        throw new IncorrectCommandException();
+                        throw new IncorrectCommandException(cmd[0]);
                     }
                     return new Exit(args, env);
 
                 case "pwd":
                     if (args.length != 0) {
-                        throw new IncorrectCommandException();
+                        throw new IncorrectCommandException(cmd[0]);
                     }
                     return new Pwd(args, env);
 
                 case "wc":
                     if (args.length > 1) {
-                        throw new IncorrectCommandException();
+                        throw new IncorrectCommandException(cmd[0]);
                     }
                     return new Wc(args, env);
 

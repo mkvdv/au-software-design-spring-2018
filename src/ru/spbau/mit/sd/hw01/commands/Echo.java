@@ -1,6 +1,7 @@
 package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import ru.spbau.mit.sd.hw01.utils.Log;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class Echo extends AbstractCommand {
     }
 
     @Override
-    public PipedInputStream exec(InputStream stdin) {
+    public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
         Log.info("echo with " + Arrays.toString(args));
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream();
@@ -34,7 +35,7 @@ public class Echo extends AbstractCommand {
             pos.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new CommandExecuteException(e.getMessage());
         }
 
         return pis;

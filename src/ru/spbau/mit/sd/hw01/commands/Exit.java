@@ -12,7 +12,7 @@ public class Exit extends AbstractCommand {
 
     @Override
     public PipedInputStream exec(InputStream stdin) {
-        System.exit(0); // dirty todo redo?
+        System.exit(0); // dirty
         return null;
     }
 }

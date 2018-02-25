@@ -1,6 +1,7 @@
 package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -20,5 +21,5 @@ public abstract class AbstractCommand {
      * @param stdin is input stream of command (often Piped Stream)
      * @return input stream for next command (result)
      */
-    public abstract PipedInputStream exec(InputStream stdin);
+    public abstract PipedInputStream exec(InputStream stdin) throws CommandExecuteException;
 }
