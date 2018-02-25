@@ -46,7 +46,7 @@ public class Shell {
         }
     }
 
-    private InputStream execute_command(String raw_cmd, Environment env)
+    public InputStream execute_command(String raw_cmd, Environment env)
             throws LexicalException, IncorrectCommandException, CommandExecuteException {
         PipedInputStream stdin = null;
         ArrayList<String> preprocessed_cmd = Preprocessor.preprocess(raw_cmd, env);

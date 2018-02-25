@@ -25,9 +25,10 @@ public class Echo extends AbstractCommand {
         try {
             pis.connect(pos);
 
-            for (String s : args) {
-                pos.write(s.getBytes());
-                pos.write(" ".getBytes());
+            for (int i = 0; i < args.length; i++) {
+                pos.write(args[i].getBytes());
+                if (i != args.length - 1)
+                    pos.write(" ".getBytes());
             }
             pos.write('\n');
 
