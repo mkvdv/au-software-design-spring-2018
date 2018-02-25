@@ -135,4 +135,25 @@ public class Tests {
         }
     }
 
+    @Test
+    public void testExecCommand() {
+        Environment env = new Environment();
+        String cmd = "ls -lh";
+
+        Shell sh = new Shell();
+        InputStream out = null;
+        try {
+            out = sh.execute_command(cmd, env);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (out != null) {
+            Scanner sc = new Scanner(out);
+            while (sc.hasNext()) {
+                System.out.println(sc.nextLine());
+            }
+        }
+    }
+
 }
