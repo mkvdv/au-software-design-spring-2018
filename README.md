@@ -39,5 +39,5 @@
 
 ```
 gradle build
-gradle run
+gradle --console plain run
 ```
