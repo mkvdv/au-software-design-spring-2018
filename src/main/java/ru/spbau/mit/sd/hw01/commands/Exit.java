@@ -22,6 +22,7 @@ public class Exit extends AbstractCommand {
      */
     @Override
     public PipedInputStream exec(InputStream stdin) {
+        System.out.println("Shell closed!");
         System.exit(0); // dirty
         return null;
     }

@@ -58,7 +58,6 @@ public class Exec extends AbstractCommand {
             pos.flush();
             pos.close();
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
             throw new CommandExecuteException(e.getMessage());
         }
 

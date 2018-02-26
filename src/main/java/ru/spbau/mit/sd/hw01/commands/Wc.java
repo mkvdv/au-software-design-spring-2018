@@ -50,12 +50,18 @@ public class Wc extends AbstractCommand {
                 nWords = countWords(s);
                 nl = countNL(s);
 
+            } catch (java.nio.file.NoSuchFileException e) {
+                throw new CommandExecuteException("wc " + args[0] + "; no such file");
             } catch (IOException e) {
-                e.printStackTrace();
-                throw new CommandExecuteException(e.getMessage());
+                e.printStackTrace(System.out);
+                throw new CommandExecuteException("wc " + e.getMessage());
             }
         } else {
             // read from stdin arg
+            if (stdin == null) {
+                return null;
+            }
+
             int len = 0;
             final int size = 1024;
             byte[] buf = new byte[size];
@@ -83,8 +89,8 @@ public class Wc extends AbstractCommand {
             pos.flush();
             pos.close();
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new CommandExecuteException(e.getMessage());
+            e.printStackTrace(System.out);
+            throw new CommandExecuteException("wc " + e.getMessage());
         }
 
         return pis;

@@ -75,7 +75,6 @@ public class Lexer {
         while (ix < s.length() && !Character.isWhitespace(s.charAt(ix)) && s.charAt(ix) != '=') {
             ix++;
         }
-        // todo corner cases ?
 
         return ix;
     }

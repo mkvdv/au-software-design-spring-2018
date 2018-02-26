@@ -24,7 +24,7 @@ public class Shell {
         Scanner sc = new Scanner(System.in);
         Environment env = new Environment();
 
-        // return using exit shell command
+        // return using 'exit' shell command
         while (true) {
             System.out.print("> ");
             if (sc.hasNext()) {
