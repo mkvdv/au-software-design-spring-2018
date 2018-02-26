@@ -41,11 +41,7 @@ public class Tests {
         String[] args = {"1", "hello", "\"dog\""};
 
         Echo echo = new Echo(args, env);
-        try {
-            out = echo.exec(null);
-        } catch (CommandExecuteException e) {
-            System.err.println(e.getMessage());
-        }
+        out = echo.exec(null);
 
         if (out != null) {
             Scanner sc = new Scanner(out);
@@ -69,11 +65,7 @@ public class Tests {
         InputStream out = null;
 
         Echo echo = new Echo(args_preprocessed, env);
-        try {
-            out = echo.exec(null);
-        } catch (CommandExecuteException e) {
-            System.err.println(e.getMessage());
-        }
+        out = echo.exec(null);
 
         if (out != null) {
             Scanner sc = new Scanner(out);

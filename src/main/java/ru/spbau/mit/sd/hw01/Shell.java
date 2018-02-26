@@ -8,7 +8,6 @@ import ru.spbau.mit.sd.hw01.utils.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PipedInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -64,7 +63,7 @@ public class Shell {
      */
     public InputStream executeCommand(String rawCmd, Environment env)
             throws LexicalException, IncorrectCommandException, CommandExecuteException {
-        PipedInputStream stdin = null;
+        InputStream stdin = null;
         ArrayList<String> preprocessedCmd = Preprocessor.preprocess(rawCmd, env);
 
         boolean envRO = false;

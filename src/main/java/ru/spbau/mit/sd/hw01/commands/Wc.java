@@ -4,7 +4,10 @@ import ru.spbau.mit.sd.hw01.Environment;
 import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import ru.spbau.mit.sd.hw01.utils.Log;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,11 +30,10 @@ public class Wc extends AbstractCommand {
      * @throws CommandExecuteException
      */
     @Override
-    public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
+    public InputStream exec(InputStream stdin) throws CommandExecuteException {
         Log.info("wc with " + Arrays.toString(args));
 
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream();
+        ByteArrayInputStream bs = null;
 
         int nl = 0;
         int nBytes = 0;
@@ -83,17 +85,9 @@ public class Wc extends AbstractCommand {
         }
 
 
-        try {
-            pis.connect(pos);
-            pos.write((nl + "\t" + nWords + '\t' + nBytes + '\n').getBytes());
-            pos.flush();
-            pos.close();
-        } catch (IOException e) {
-            e.printStackTrace(System.out);
-            throw new CommandExecuteException("wc " + e.getMessage());
-        }
+        bs = new ByteArrayInputStream((nl + "\t" + nWords + '\t' + nBytes + '\n').getBytes());
 
-        return pis;
+        return bs;
     }
 
     private int countNL(String s) {

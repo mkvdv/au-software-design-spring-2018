@@ -4,10 +4,9 @@ import ru.spbau.mit.sd.hw01.Environment;
 import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import ru.spbau.mit.sd.hw01.utils.Log;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,27 +28,23 @@ public class Cat extends AbstractCommand {
      * @throws CommandExecuteException
      */
     @Override
-    public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
+    public InputStream exec(InputStream stdin) throws CommandExecuteException {
         assert (args.length == 1); // here just 1 file
         Log.info("cat with " + Arrays.toString(args));
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream();
+        ByteArrayInputStream bs = null;
 
         Path path = Paths.get(args[0]);
         byte[] bytes;
 
         try {
-            pis.connect(pos);
             bytes = Files.readAllBytes(path);
-            pos.write(bytes);
-            pos.flush();
-            pos.close();
+            bs = new ByteArrayInputStream(bytes);
         } catch (java.nio.file.NoSuchFileException e) {
             throw new CommandExecuteException("cat " + args[0] + "; no such file");
         } catch (IOException e) {
             e.printStackTrace(System.out);
             throw new CommandExecuteException("cat " + args[0]);
         }
-        return pis;
+        return bs;
     }
 }

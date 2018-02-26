@@ -3,7 +3,9 @@ package ru.spbau.mit.sd.hw01.commands;
 import ru.spbau.mit.sd.hw01.Environment;
 import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.StandardCopyOption;
 
 /**
@@ -23,13 +25,11 @@ public class Exec extends AbstractCommand {
      * @return input stream for next command (result)
      */
     @Override
-    public PipedInputStream exec(InputStream stdin) throws CommandExecuteException {
-        PipedInputStream pis = new PipedInputStream();
-        PipedOutputStream pos = new PipedOutputStream();
+    public InputStream exec(InputStream stdin) throws CommandExecuteException {
+        InputStream output = null;
         File stdinFile = null;
 
         try {
-            pis.connect(pos);
             ProcessBuilder pb = new ProcessBuilder(args);
 
             // use tmp file for redirecting input - bad design
@@ -46,22 +46,17 @@ public class Exec extends AbstractCommand {
             Process ps = pb.start();
             ps.waitFor();
 
-            InputStream psOutput = ps.getInputStream();
-            int outputSize = psOutput.available();
-            byte[] buffer = new byte[outputSize];
-            int readedSize = psOutput.read(buffer);
-            pos.write(buffer, 0, readedSize);
+            output = ps.getInputStream();
 
             if (stdinFile != null) {
                 stdinFile.delete();
             }
-            pos.flush();
-            pos.close();
+
         } catch (IOException | InterruptedException e) {
             throw new CommandExecuteException(e.getMessage());
         }
 
-        return pis;
+        return output;
     }
 
 }

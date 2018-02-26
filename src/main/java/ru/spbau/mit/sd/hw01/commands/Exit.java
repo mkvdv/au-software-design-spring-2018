@@ -3,7 +3,6 @@ package ru.spbau.mit.sd.hw01.commands;
 import ru.spbau.mit.sd.hw01.Environment;
 
 import java.io.InputStream;
-import java.io.PipedInputStream;
 
 /**
  * Class for execution commands like: exit
@@ -21,7 +20,7 @@ public class Exit extends AbstractCommand {
      * @return not return
      */
     @Override
-    public PipedInputStream exec(InputStream stdin) {
+    public InputStream exec(InputStream stdin) {
         System.out.println("Shell closed!");
         System.exit(0); // dirty
         return null;

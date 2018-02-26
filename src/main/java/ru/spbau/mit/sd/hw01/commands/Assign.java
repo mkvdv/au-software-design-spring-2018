@@ -4,7 +4,6 @@ import ru.spbau.mit.sd.hw01.Environment;
 import ru.spbau.mit.sd.hw01.utils.Log;
 
 import java.io.InputStream;
-import java.io.PipedInputStream;
 import java.util.Arrays;
 
 /**
@@ -22,7 +21,7 @@ public class Assign extends AbstractCommand {
      * @return null
      */
     @Override
-    public PipedInputStream exec(InputStream stdin) {
+    public InputStream exec(InputStream stdin) {
         Log.info("assign with " + Arrays.toString(args));
         assert (args.length == 2);
 
