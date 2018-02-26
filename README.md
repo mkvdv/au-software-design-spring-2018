@@ -41,3 +41,7 @@
 gradle build
 gradle --console plain run
 ```
+
+
+### Диаграмма классов ?
+![Class Diagram](https://raw.githubusercontent.com/mkvdv/au-software-design-spring-2018/cli/cli_diagram.png)
