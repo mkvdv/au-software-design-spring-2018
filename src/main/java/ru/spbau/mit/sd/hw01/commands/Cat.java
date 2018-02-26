@@ -42,8 +42,7 @@ public class Cat extends AbstractCommand {
         } catch (java.nio.file.NoSuchFileException e) {
             throw new CommandExecuteException("cat " + args[0] + "; no such file");
         } catch (IOException e) {
-            e.printStackTrace(System.out);
-            throw new CommandExecuteException("cat " + args[0]);
+            throw new CommandExecuteException("cat " + args[0] + "; mesg: " + e.getMessage());
         }
         return bs;
     }
