@@ -24,8 +24,8 @@ public class Environment {
     /**
      * Set new value val for key
      *
-     * @param key
-     * @param val
+     * @param key name in command name=otherName
+     * @param val otherName in command name=otherName
      */
     public void set(String key, String val) {
         if (!readOnly)
@@ -35,7 +35,7 @@ public class Environment {
     /**
      * Return value for key
      *
-     * @param key
+     * @param key some string you need to replace
      * @return return value for key, or null if there no such key
      */
     public String get(String key) {

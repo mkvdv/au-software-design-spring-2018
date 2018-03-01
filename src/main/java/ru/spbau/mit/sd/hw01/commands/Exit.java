@@ -1,6 +1,7 @@
 package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExitException;
 
 import java.io.InputStream;
 
@@ -20,9 +21,8 @@ public class Exit extends AbstractCommand {
      * @return not return
      */
     @Override
-    public InputStream exec(InputStream stdin) {
+    public InputStream exec(InputStream stdin) throws CommandExitException {
         System.out.println("Shell closed!");
-        System.exit(0); // dirty
-        return null;
+        throw new CommandExitException();
     }
 }

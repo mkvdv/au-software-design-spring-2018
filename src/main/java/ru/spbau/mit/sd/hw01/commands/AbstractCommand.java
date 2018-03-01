@@ -2,6 +2,7 @@ package ru.spbau.mit.sd.hw01.commands;
 
 import ru.spbau.mit.sd.hw01.Environment;
 import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExitException;
 
 import java.io.InputStream;
 
@@ -25,5 +26,5 @@ public abstract class AbstractCommand {
      * @return input stream for next command (result)
      * @throws CommandExecuteException if something goes wrong
      */
-    public abstract InputStream exec(InputStream stdin) throws CommandExecuteException;
+    public abstract InputStream exec(InputStream stdin) throws CommandExecuteException, CommandExitException;
 }

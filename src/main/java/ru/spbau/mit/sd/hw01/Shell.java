@@ -10,6 +10,7 @@ import ru.spbau.mit.sd.hw01.utils.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Scanner;
  */
 public class Shell {
     /**
-     * Run shell session, never return.
+     * Run shell session, return only if exit command typed.
      */
     public void run() {
         Log.info("Shell Started");
@@ -36,7 +37,7 @@ public class Shell {
                 } catch (LexicalException | IncorrectCommandException | CommandExecuteException e) {
                     System.out.println(e.getMessage());
                 } catch (CommandExitException e) {
-
+                    return;
                 }
 
                 // todo move to utils
@@ -67,7 +68,7 @@ public class Shell {
     public InputStream executeCommand(String rawCmd, Environment env)
             throws LexicalException, IncorrectCommandException, CommandExecuteException, CommandExitException {
         InputStream stdin = null;
-        ArrayList<String> preprocessedCmd = Preprocessor.preprocess(rawCmd, env);
+        List<String> preprocessedCmd = Preprocessor.preprocess(rawCmd, env);
 
         boolean envRO = false;
         if (preprocessedCmd.contains("|")) {

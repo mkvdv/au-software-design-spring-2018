@@ -2,7 +2,7 @@ package ru.spbau.mit.sd.hw01;
 
 import ru.spbau.mit.sd.hw01.exceptions.LexicalException;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -17,12 +17,12 @@ public class Preprocessor {
      * @return array of arguments
      * @throws LexicalException if command is incorrect
      */
-    public static ArrayList<String> preprocess(final String cmd, final Environment env) throws LexicalException {
+    public static List<String> preprocess(final String cmd, final Environment env) throws LexicalException {
         if (cmd == null) {
             return null;
         }
 
-        ArrayList<String> tokenized = Lexer.tokenize(cmd);
+        List<String> tokenized = Lexer.tokenize(cmd);
 
         for (int i = 0; i < tokenized.size(); i++) {
             if (tokenized.get(i).charAt(0) == '\''

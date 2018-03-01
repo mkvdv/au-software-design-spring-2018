@@ -33,9 +33,9 @@ public class Wc extends AbstractCommand {
     public InputStream exec(InputStream stdin) throws CommandExecuteException {
         Log.info("wc with " + Arrays.toString(args));
 
-        ByteArrayInputStream bs = null;
+        ByteArrayInputStream byteStream = null;
 
-        int nl = 0;
+        int nLines = 0;
         int nBytes = 0;
         int nWords = 0;
 
@@ -43,14 +43,14 @@ public class Wc extends AbstractCommand {
             // read from file
             assert (args.length == 1);
 
-            Path path = Paths.get(args[0]);
-            byte[] bytes;
             try {
+                Path path = Paths.get(args[0]);
+                byte[] bytes;
                 bytes = Files.readAllBytes(path);
                 nBytes = bytes.length;
                 String s = new String(bytes);
                 nWords = countWords(s);
-                nl = countNL(s);
+                nLines = countNL(s);
 
             } catch (java.nio.file.NoSuchFileException e) {
                 throw new CommandExecuteException("wc " + args[0] + "; no such file");
@@ -72,21 +72,19 @@ public class Wc extends AbstractCommand {
                 while ((len = stdin.read(buf, 0, size)) != -1)
                     bos.write(buf, 0, len);
             } catch (IOException e) {
-                e.printStackTrace();
-                return null;
+                throw new CommandExecuteException("wc " + args[0] + "; IO exception: " + e.getMessage());
             }
             buf = bos.toByteArray();
 
             nBytes = buf.length;
             String s = new String(buf);
             nWords = countWords(s);
-            nl = countNL(s);
+            nLines = countNL(s);
         }
 
+        byteStream = new ByteArrayInputStream((nLines + "\t" + nWords + '\t' + nBytes + '\n').getBytes());
 
-        bs = new ByteArrayInputStream((nl + "\t" + nWords + '\t' + nBytes + '\n').getBytes());
-
-        return bs;
+        return byteStream;
     }
 
     private int countNL(String s) {
@@ -105,6 +103,5 @@ public class Wc extends AbstractCommand {
         }
         return line.split("\\s+|\\n").length;
     }
-
 
 }

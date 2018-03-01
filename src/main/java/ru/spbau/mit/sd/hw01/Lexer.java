@@ -3,6 +3,7 @@ package ru.spbau.mit.sd.hw01;
 import ru.spbau.mit.sd.hw01.exceptions.LexicalException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Store some static functions for tokenizing strings.
@@ -15,8 +16,8 @@ public class Lexer {
      * @return array of tokens (command args and names)
      * @throws LexicalException if quotation not ending or other inner exception
      */
-    public static ArrayList<String> tokenize(final String s) throws LexicalException {
-        ArrayList<String> arr = new ArrayList<>();
+    public static List<String> tokenize(final String s) throws LexicalException {
+        List<String> arr = new ArrayList<>();
 
         int ix = 0;
         while (ix < s.length()) {
