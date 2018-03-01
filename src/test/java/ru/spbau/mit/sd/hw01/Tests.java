@@ -213,6 +213,31 @@ public class Tests {
     }
 
     @Test
+    public void testOneMoreSubstitution() {
+        Environment env = new Environment();
+        String cmd1 = "x=1";
+        String cmd2 = "echo 123$x \"123$x\" '123$x'";
+        String expected = "1231 1231 123$x";
+
+        Shell sh = new Shell();
+        InputStream out = null;
+
+        try {
+            sh.executeCommand(cmd1, env);
+            out = sh.executeCommand(cmd2, env);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (out != null) {
+            Scanner sc = new Scanner(out);
+            Assert.assertEquals(expected, sc.nextLine());
+        } else {
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void testExitUsingException() {
         Environment env = new Environment();
         String cmd = "exit";
