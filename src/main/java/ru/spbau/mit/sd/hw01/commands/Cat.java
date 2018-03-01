@@ -5,6 +5,7 @@ import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import ru.spbau.mit.sd.hw01.utils.Log;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -29,20 +30,35 @@ public class Cat extends AbstractCommand {
      */
     @Override
     public InputStream exec(InputStream stdin) throws CommandExecuteException {
-        assert (args.length == 1); // here just 1 file
         Log.info("cat with " + Arrays.toString(args));
         ByteArrayInputStream bs = null;
 
-        Path path = Paths.get(args[0]);
-        byte[] bytes;
 
-        try {
-            bytes = Files.readAllBytes(path);
-            bs = new ByteArrayInputStream(bytes);
-        } catch (java.nio.file.NoSuchFileException e) {
-            throw new CommandExecuteException("cat " + args[0] + "; no such file");
-        } catch (IOException e) {
-            throw new CommandExecuteException("cat " + args[0] + "; mesg: " + e.getMessage());
+        if (args.length == 1) {
+            // read from file
+            try {
+                Path path = Paths.get(args[0]);
+                byte[] bytes;
+                bytes = Files.readAllBytes(path);
+                bs = new ByteArrayInputStream(bytes);
+            } catch (java.nio.file.NoSuchFileException e) {
+                throw new CommandExecuteException("cat " + args[0] + "; no such file");
+            } catch (IOException e) {
+                throw new CommandExecuteException("cat " + args[0] + "; mesg: " + e.getMessage());
+            }
+        } else {
+            int len = 0;
+            final int size = 1024;
+            byte[] buf = new byte[size];
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            try {
+                while ((len = stdin.read(buf, 0, size)) != -1)
+                    bos.write(buf, 0, len);
+            } catch (IOException e) {
+                throw new CommandExecuteException("cat, IO exception: " + e.getMessage());
+            }
+            bs = new ByteArrayInputStream(bos.toByteArray());
         }
         return bs;
     }

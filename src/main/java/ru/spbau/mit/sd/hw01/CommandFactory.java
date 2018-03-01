@@ -26,7 +26,7 @@ public class CommandFactory {
             String[] args = Arrays.copyOfRange(cmd, 1, cmd.length);
             switch (cmd[0]) {
                 case "cat":
-                    if (args.length != 1) { // exactly one!
+                    if (args.length > 1) { // can read from stdin if 0 args
                         throw new IncorrectCommandException(cmd[0]);
                     }
                     return new Cat(args, env);

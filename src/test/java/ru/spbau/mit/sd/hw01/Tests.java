@@ -330,4 +330,27 @@ public class Tests {
         }
     }
 
+    @Test
+    public void testCatFromStdin() {
+        Environment env = new Environment();
+        String expected1 = "hello world";
+        String cmd = "echo hello world | cat ";
+
+        Shell sh = new Shell();
+        InputStream out = null;
+        try {
+            out = sh.executeCommand(cmd, env);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+
+        if (out != null) {
+            Scanner sc = new Scanner(out);
+            Assert.assertEquals(expected1, sc.nextLine());
+        } else {
+            Assert.fail();
+        }
+    }
+
 }
