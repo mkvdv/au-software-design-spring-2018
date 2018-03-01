@@ -60,7 +60,9 @@ public class Preprocessor {
                 tokenized.set(i, builder.toString());
             }
 
-            tokenized.set(i, tokenized.get(i).replaceAll("\\\\", ""));
+            tokenized.set(i, tokenized.get(i).replaceAll("\\\\\\$", "\\$"));
+            tokenized.set(i, tokenized.get(i).replaceAll("\\\\\"", "\""));
+            tokenized.set(i, tokenized.get(i).replaceAll("\\\\\'", "\'"));
         }
 
         if (tokenized.get(tokenized.size() - 1).equals("|")) {
