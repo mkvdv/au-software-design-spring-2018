@@ -5,6 +5,8 @@ import org.junit.Test;
 import ru.spbau.mit.sd.hw01.commands.Echo;
 import ru.spbau.mit.sd.hw01.commands.Pwd;
 import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExitException;
+import ru.spbau.mit.sd.hw01.exceptions.IncorrectCommandException;
 import ru.spbau.mit.sd.hw01.exceptions.LexicalException;
 
 import java.io.InputStream;
@@ -26,11 +28,14 @@ public class Tests {
             out = pwd.exec(null);
         } catch (CommandExecuteException e) {
             System.err.println(e.getMessage());
+            Assert.fail();
         }
 
         if (out != null) {
             Scanner sc = new Scanner(out);
             Assert.assertEquals(absolutePath, sc.nextLine());
+        } else {
+            Assert.fail();
         }
     }
 
@@ -46,6 +51,8 @@ public class Tests {
         if (out != null) {
             Scanner sc = new Scanner(out);
             Assert.assertEquals("1 hello \"dog\"", sc.nextLine());
+        } else {
+            Assert.fail();
         }
     }
 
@@ -61,6 +68,7 @@ public class Tests {
             args_preprocessed = Preprocessor.preprocess(args, env).toArray(new String[0]);
         } catch (LexicalException e) {
             e.printStackTrace();
+            Assert.fail();
         }
         InputStream out = null;
 
@@ -70,6 +78,8 @@ public class Tests {
         if (out != null) {
             Scanner sc = new Scanner(out);
             Assert.assertEquals(expected, sc.nextLine());
+        } else {
+            Assert.fail();
         }
     }
 
@@ -83,6 +93,7 @@ public class Tests {
             sh.executeCommand(cmd, env);
         } catch (Exception e) {
             e.printStackTrace();
+            Assert.fail();
         }
 
         Assert.assertEquals("cat", env.get("dog"));
@@ -106,6 +117,8 @@ public class Tests {
             while (sc.hasNext()) {
                 System.out.println(sc.nextLine());
             }
+        } else {
+            Assert.fail();
         }
     }
 
@@ -126,6 +139,30 @@ public class Tests {
         if (out != null) {
             Scanner sc = new Scanner(out);
             Assert.assertEquals(expected, sc.nextLine());
+        } else {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testWcFromFile() {
+        Environment env = new Environment();
+        String cmd = "wc src/test/resources/test04";
+        String expected = "5\t6\t29";
+
+        Shell sh = new Shell();
+        InputStream out = null;
+        try {
+            out = sh.executeCommand(cmd, env);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (out != null) {
+            Scanner sc = new Scanner(out);
+            Assert.assertEquals(expected, sc.nextLine());
+        } else {
+            Assert.fail();
         }
     }
 
@@ -170,6 +207,126 @@ public class Tests {
         if (out != null) {
             Scanner sc = new Scanner(out);
             Assert.assertEquals(expected, sc.nextLine());
+        } else {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testExitUsingException() {
+        Environment env = new Environment();
+        String cmd = "exit";
+        Shell sh = new Shell();
+
+        try {
+            sh.executeCommand(cmd, env);
+        } catch (CommandExitException e) {
+            return; // OK
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("unreachable code");
+
+        }
+    }
+
+
+    @Test
+    public void testLexicalError() {
+        Environment env = new Environment();
+        String cmd = "echo \"123 43 | wc";
+        Shell sh = new Shell();
+
+        try {
+            sh.executeCommand(cmd, env);
+        } catch (LexicalException e) {
+            return; // OK
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("unreachable code");
+
+        }
+    }
+
+
+    @Test
+    public void testIncorrectCommandError() {
+        Environment env = new Environment();
+        String cmd = "exit 42";
+        Shell sh = new Shell();
+
+        try {
+            sh.executeCommand(cmd, env);
+        } catch (IncorrectCommandException e) {
+            return; // OK
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("unreachable code");
+
+        }
+    }
+
+    @Test
+    public void testCommandExecuteError() {
+        Environment env = new Environment();
+        String cmd = "cat nofile__42__";
+        Shell sh = new Shell();
+
+        try {
+            sh.executeCommand(cmd, env);
+        } catch (CommandExecuteException e) {
+            return; // OK
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("unreachable code");
+
+        }
+    }
+
+    @Test
+    public void testAssignBlockedInPipe() {
+        Environment env = new Environment();
+        String expected = "not_modified";
+        env.set("x", expected);
+        String cmd = "echo 42 | x=256 | echo $x";
+
+        Shell sh = new Shell();
+        InputStream out = null;
+        try {
+            out = sh.executeCommand(cmd, env);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+
+        if (out != null) {
+            Scanner sc = new Scanner(out);
+            Assert.assertEquals(expected, sc.nextLine());
+        } else {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testExecCommandPiped() {
+        Environment env = new Environment();
+        String expected1 = " hello v ";
+        String expected2 = " world 1 ";
+        String cmd = "printf \"" + expected1 + "\\n" + expected2 + "\" | grep hello";
+
+        Shell sh = new Shell();
+        InputStream out = null;
+        try {
+            out = sh.executeCommand(cmd, env);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+
+        if (out != null) {
+            Scanner sc = new Scanner(out);
+            Assert.assertEquals(expected1, sc.nextLine());
+        } else {
+            Assert.fail();
         }
     }
 
