@@ -12,7 +12,7 @@ public class Lexer {
     /**
      * Extract all tokens, return array of command arguments.
      *
-     * @param s - raw command string
+     * @param s raw command string
      * @return array of tokens (command args and names)
      * @throws LexicalException if quotation not ending or other inner exception
      */
