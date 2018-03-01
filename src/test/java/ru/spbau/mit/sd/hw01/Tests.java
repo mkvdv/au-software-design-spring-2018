@@ -3,7 +3,6 @@ package ru.spbau.mit.sd.hw01;
 import org.junit.Assert;
 import org.junit.Test;
 import ru.spbau.mit.sd.hw01.commands.Echo;
-import ru.spbau.mit.sd.hw01.commands.Pwd;
 import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
 import ru.spbau.mit.sd.hw01.exceptions.CommandExitException;
 import ru.spbau.mit.sd.hw01.exceptions.IncorrectCommandException;
@@ -20,20 +19,21 @@ public class Tests {
     @Test
     public void testPwd() {
         Environment env = new Environment();
-        String absolutePath = Paths.get("").toAbsolutePath().toString();
+        String expected = Paths.get("").toAbsolutePath().toString();
         InputStream out = null;
+        String cmd = "pwd";
 
-        Pwd pwd = new Pwd(null, env);
+        Shell sh = new Shell();
         try {
-            out = pwd.exec(null);
-        } catch (CommandExecuteException e) {
-            System.err.println(e.getMessage());
+            out = sh.executeCommand(cmd, env);
+        } catch (Exception e) {
+            e.printStackTrace();
             Assert.fail();
         }
 
         if (out != null) {
             Scanner sc = new Scanner(out);
-            Assert.assertEquals(absolutePath, sc.nextLine());
+            Assert.assertEquals(expected, sc.nextLine());
         } else {
             Assert.fail();
         }
