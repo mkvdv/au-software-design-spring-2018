@@ -18,7 +18,7 @@ public class Exit extends AbstractCommand {
      * Shut down shell and the whole program
      *
      * @param stdin ignored
-     * @return not return
+     * @return not return, throw exception
      */
     @Override
     public InputStream exec(InputStream stdin) throws CommandExitException {

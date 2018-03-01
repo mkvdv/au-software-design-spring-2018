@@ -19,7 +19,7 @@ public class Exec extends AbstractCommand {
     /**
      * Run command with arguments - bot from args[]
      * redirect stdin stream to it
-     * Use temporary file (kostil') for redirecting input.
+     * Use temporary file (a kludge) for redirecting input.
      *
      * @param stdin is input stream of command (often Piped Stream)
      * @return input stream for next command (result)

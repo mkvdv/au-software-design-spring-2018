@@ -27,7 +27,7 @@ public class Wc extends AbstractCommand {
      *
      * @param stdin is like stdin for wc application in unix
      * @return stream with result
-     * @throws CommandExecuteException
+     * @throws CommandExecuteException if IO or other error
      */
     @Override
     public InputStream exec(InputStream stdin) throws CommandExecuteException {

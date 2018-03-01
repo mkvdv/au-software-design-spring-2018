@@ -67,9 +67,7 @@ public class Lexer {
     }
 
     /**
-     * @param s
-     * @param ix
-     * @return ix after ending of $name
+     * ix after ending of $name
      */
     private static int extractName(final String s, int ix) {
         ix++;
@@ -83,8 +81,6 @@ public class Lexer {
     /**
      * Return ix after any other token, not beginning with $ or ("|').
      *
-     * @param s
-     * @param ix
      * @return first index after ending
      */
     private static int extractToken(final String s, int ix) {
@@ -100,8 +96,6 @@ public class Lexer {
     /**
      * Return index after string argument ends.
      *
-     * @param s
-     * @param ix
      * @return return ix after ending ' or " symbol
      * @throws LexicalException if not ending quotation
      */

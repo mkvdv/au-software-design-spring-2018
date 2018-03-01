@@ -26,7 +26,7 @@ public class Cat extends AbstractCommand {
      *
      * @param stdin is input stream of command (often Piped Stream)
      * @return stream, contain text of file.
-     * @throws CommandExecuteException
+     * @throws CommandExecuteException if anything with IO happened
      */
     @Override
     public InputStream exec(InputStream stdin) throws CommandExecuteException {
