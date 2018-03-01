@@ -15,7 +15,7 @@ public class Environment {
     }
 
     /**
-     * @return absolute path to current directory
+     * Return absolute path to current directory
      */
     public String getCurrentDir() {
         return Paths.get("").toAbsolutePath().toString();

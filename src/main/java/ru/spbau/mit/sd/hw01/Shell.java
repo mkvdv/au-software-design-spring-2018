@@ -2,6 +2,7 @@ package ru.spbau.mit.sd.hw01;
 
 import ru.spbau.mit.sd.hw01.commands.AbstractCommand;
 import ru.spbau.mit.sd.hw01.exceptions.CommandExecuteException;
+import ru.spbau.mit.sd.hw01.exceptions.CommandExitException;
 import ru.spbau.mit.sd.hw01.exceptions.IncorrectCommandException;
 import ru.spbau.mit.sd.hw01.exceptions.LexicalException;
 import ru.spbau.mit.sd.hw01.utils.Log;
@@ -34,6 +35,8 @@ public class Shell {
                     res = executeCommand(line, env);
                 } catch (LexicalException | IncorrectCommandException | CommandExecuteException e) {
                     System.out.println(e.getMessage());
+                } catch (CommandExitException e) {
+
                 }
 
                 // todo move to utils
@@ -62,7 +65,7 @@ public class Shell {
      * @throws CommandExecuteException   if some error during execution of command
      */
     public InputStream executeCommand(String rawCmd, Environment env)
-            throws LexicalException, IncorrectCommandException, CommandExecuteException {
+            throws LexicalException, IncorrectCommandException, CommandExecuteException, CommandExitException {
         InputStream stdin = null;
         ArrayList<String> preprocessedCmd = Preprocessor.preprocess(rawCmd, env);
 
