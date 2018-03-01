@@ -8,7 +8,7 @@ import java.util.logging.Logger;
  */
 public class Log {
     private static Logger log = Logger.getAnonymousLogger();
-    private static boolean isLoging = false;
+    private static boolean isLogging = false;
 
     private Log() { // private constructor
     }
@@ -19,7 +19,7 @@ public class Log {
      * @param s
      */
     public static void info(String s) {
-        if (isLoging) {
+        if (isLogging) {
             log.log(Level.INFO, s);
         }
     }
@@ -30,16 +30,16 @@ public class Log {
      * @param s
      */
     public static void warning(String s) {
-        if (isLoging) {
+        if (isLogging) {
             log.log(Level.WARNING, s);
         }
     }
 
-    public static boolean isIsLoging() {
-        return isLoging;
+    public static boolean isIsLogging() {
+        return isLogging;
     }
 
-    public static void setIsLoging(final boolean isLoging) {
-        Log.isLoging = isLoging;
+    public static void setIsLogging(final boolean isLogging) {
+        Log.isLogging = isLogging;
     }
 }
