@@ -51,6 +51,8 @@ public class Shell {
                         e.printStackTrace();
                     }
                 }
+            } else {
+                return;
             }
         }
     }
