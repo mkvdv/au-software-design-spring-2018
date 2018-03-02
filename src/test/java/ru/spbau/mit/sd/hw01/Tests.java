@@ -254,7 +254,6 @@ public class Tests {
         }
     }
 
-
     @Test
     public void testLexicalError() {
         Environment env = new Environment();
@@ -272,22 +271,13 @@ public class Tests {
         }
     }
 
-
-    @Test
-    public void testIncorrectCommandError() {
+    @Test(expected = IncorrectCommandException.class)
+    public void testIncorrectCommandError() throws IncorrectCommandException, CommandExecuteException, LexicalException, CommandExitException {
         Environment env = new Environment();
         String cmd = "exit 42";
         Shell sh = new Shell();
 
-        try {
-            sh.executeCommand(cmd, env);
-        } catch (IncorrectCommandException e) {
-            return; // OK
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail("unreachable code");
-
-        }
+        sh.executeCommand(cmd, env);
     }
 
     @Test
