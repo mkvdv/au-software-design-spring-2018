@@ -37,9 +37,12 @@ public class Preprocessor {
                 tokenized.set(i, removeQuotations(tokenized.get(i)));
             }
 
-            String regex = "(?=\\\\\\$|\\s|\\$|\\\\\'|\\\\\")";
+
+            String regex = "((?<=\')|(?=\\\\\\$|\\s|\\$|\\\\\'|\\\\\"|\'))";
             String[] words = tokenized.get(i).split(regex);
-            Boolean replaced = false;
+            boolean replaced = false;
+
+            // replace all $key with values in env
             for (int j = 0; j < words.length; j++) {
                 if (words[j].startsWith("$")
                         && (j == 0 || !words[j - 1].equals("\\"))) { // \$ is $

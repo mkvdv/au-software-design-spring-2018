@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Lexer {
     /**
-     * Extract all tokens, return array of command arguments.
+     * Extract all tokens, return list of command arguments (names and strings - tokens)
      *
      * @param s raw command string
      * @return array of tokens (command args and names)

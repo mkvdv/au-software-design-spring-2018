@@ -368,4 +368,29 @@ public class Tests {
         }
     }
 
+    @Test
+    public void testSubstitutionNested() {
+        Environment env = new Environment();
+        String expected1 = "\'5\'";
+        String cmd1 = "x=5";
+        String cmd2 = "echo \"'$x'\"";
+
+        Shell sh = new Shell();
+        InputStream out = null;
+        try {
+            sh.executeCommand(cmd1, env);
+            out = sh.executeCommand(cmd2, env);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+
+        if (out != null) {
+            Scanner sc = new Scanner(out);
+            Assert.assertEquals(expected1, sc.nextLine());
+        } else {
+            Assert.fail();
+        }
+    }
+
 }
