@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -28,31 +29,35 @@ public class Shell {
         // return using 'exit' shell command
         while (true) {
             System.out.print("> ");
-            if (sc.hasNext()) {
-                String line = sc.nextLine();
-
-                InputStream res = null;
-                try {
-                    res = executeCommand(line, env);
-                } catch (LexicalException | IncorrectCommandException | CommandExecuteException e) {
-                    System.out.println(e.getMessage());
-                } catch (CommandExitException e) {
-                    return;
-                }
-
-                // todo move to utils
-                if (res != null) {
-                    byte[] buf = new byte[0];
-                    try {
-                        buf = new byte[res.available()];
-                        int size = res.read(buf);
-                        System.out.write(buf, 0, size);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
+            String line = null;
+            try {
+                line = sc.nextLine();
+            } catch (NoSuchElementException e) {
                 return;
+            }
+            if (line != null && line.isEmpty()) {
+                continue;
+            }
+
+            InputStream res = null;
+            try {
+                res = executeCommand(line, env);
+            } catch (LexicalException | IncorrectCommandException | CommandExecuteException e) {
+                System.out.println(e.getMessage());
+            } catch (CommandExitException e) {
+                return;
+            }
+
+            // todo move to utils
+            if (res != null) {
+                byte[] buf = new byte[0];
+                try {
+                    buf = new byte[res.available()];
+                    int size = res.read(buf);
+                    System.out.write(buf, 0, size);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
